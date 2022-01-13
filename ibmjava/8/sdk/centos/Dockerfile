@@ -23,8 +23,7 @@ FROM centos:7
 
 MAINTAINER Jayashree Gopi <jayasg12@in.ibm.com> (@jayasg12), weiliang
 
-RUN apt-get update \
-    && yum install -y wget ca-certificates
+RUN yum install -y wget ca-certificates
 
 ENV JAVA_VERSION 8.0.7.0
 
