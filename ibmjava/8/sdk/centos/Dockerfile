@@ -26,37 +26,40 @@ MAINTAINER Jayashree Gopi <jayasg12@in.ibm.com> (@jayasg12), weiliang
 RUN yum install -y wget ca-certificates
 
 ENV JAVA_VERSION 8.0.7.0
+ENV ESUM 9fa9b9cb755667dd165d585d69da234536da1d5dfcaa430468e37e16cc650f9c
+ENV YML_FILE 8.0/sdk/linux/x86_64/index.yml
+ENV BASE_URL="https://public.dhe.ibm.com/ibmdl/export/pub/systems/cloud/runtimes/java/meta/"
 
-RUN set -eux; \
-    ARCH="$(arch)"; \
-    case "${ARCH}" in \
-       amd64|x86_64) \
-         ESUM='9fa9b9cb755667dd165d585d69da234536da1d5dfcaa430468e37e16cc650f9c'; \
-         YML_FILE='8.0/sdk/linux/x86_64/index.yml'; \
-         ;; \
-       i386) \
-         ESUM='6e998d7152cf5816fc0759abb1f7f517788f7dbf38b8f2a71ebc3272cf940b53'; \
-         YML_FILE='8.0/sdk/linux/i386/index.yml'; \
-         ;; \
-       ppc64el|ppc64le) \
-         ESUM='cde891855118977b203cf15833207f42a62da0902bad30462cdddcadc23ebfeb'; \
-         YML_FILE='8.0/sdk/linux/ppc64le/index.yml'; \
-         ;; \
-       s390) \
-         ESUM='18e71aaddc90197969e76cdbe9c23e9b8ff0960b88ba854e179bf80629bc740b'; \
-         YML_FILE='8.0/sdk/linux/s390/index.yml'; \
-         ;; \
-       s390x) \
-         ESUM='ab843ee0b0e7e9765afb3a5081630eeb17b0372bc55b5c7dc37e8d03aa9c4d1a'; \
-         YML_FILE='8.0/sdk/linux/s390x/index.yml'; \
-         ;; \
-       *) \
-         echo "Unsupported arch: ${ARCH}"; \
-         exit 1; \
-         ;; \
-    esac; \
-    BASE_URL="https://public.dhe.ibm.com/ibmdl/export/pub/systems/cloud/runtimes/java/meta/"; \
-    wget -q -U UA_IBM_JAVA_Docker -O /tmp/index.yml ${BASE_URL}/${YML_FILE}; \
+#RUN set -eux; \
+#    ARCH="$(arch)"; \
+#    case "${ARCH}" in \
+#       amd64|x86_64) \
+#         ESUM='9fa9b9cb755667dd165d585d69da234536da1d5dfcaa430468e37e16cc650f9c'; \
+#         YML_FILE='8.0/sdk/linux/x86_64/index.yml'; \
+#         ;; \
+#       i386) \
+#         ESUM='6e998d7152cf5816fc0759abb1f7f517788f7dbf38b8f2a71ebc3272cf940b53'; \
+#         YML_FILE='8.0/sdk/linux/i386/index.yml'; \
+#         ;; \
+#       ppc64el|ppc64le) \
+#         ESUM='cde891855118977b203cf15833207f42a62da0902bad30462cdddcadc23ebfeb'; \
+#         YML_FILE='8.0/sdk/linux/ppc64le/index.yml'; \
+#         ;; \
+#       s390) \
+#         ESUM='18e71aaddc90197969e76cdbe9c23e9b8ff0960b88ba854e179bf80629bc740b'; \
+#         YML_FILE='8.0/sdk/linux/s390/index.yml'; \
+#         ;; \
+#       s390x) \
+#         ESUM='ab843ee0b0e7e9765afb3a5081630eeb17b0372bc55b5c7dc37e8d03aa9c4d1a'; \
+#         YML_FILE='8.0/sdk/linux/s390x/index.yml'; \
+#         ;; \
+#       *) \
+#         echo "Unsupported arch: ${ARCH}"; \
+#         exit 1; \
+#         ;; \
+#    esac; \
+#    BASE_URL="https://public.dhe.ibm.com/ibmdl/export/pub/systems/cloud/runtimes/java/meta/"; \
+RUN wget -q -U UA_IBM_JAVA_Docker -O /tmp/index.yml ${BASE_URL}/${YML_FILE}; \
     JAVA_URL=$(sed -n '/^'${JAVA_VERSION}:'/{n;s/\s*uri:\s//p}'< /tmp/index.yml); \
     wget -q -U UA_IBM_JAVA_Docker -O /tmp/ibm-java.bin ${JAVA_URL}; \
     echo "${ESUM}  /tmp/ibm-java.bin" | sha256sum -c -; \
