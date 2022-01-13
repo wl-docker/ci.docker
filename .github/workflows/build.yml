@@ -31,5 +31,5 @@ jobs:
           docker buildx build \
           --platform=linux/amd64 \
           --output "type=image,push=true" \
-          --file ibmjava/8/centos/Dockerfile . \
+          --file ibmjava/8/sdk/centos/Dockerfile . \
           --tag xzxwl/ibm-java-8.0.7.0:centos7
